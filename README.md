@@ -54,6 +54,12 @@ function App() {
 export default App
 ```
 
+### Uploading the cropped image
+
+The `saveImage` function receives a `file` object with the cropped image data
+encoded in `base64`. If you need a blob/buffer, check out this
+[b64toBlob function](https://stackoverflow.com/a/16245768)
+
 ### Special Thanks
 
 - projw-the-lessful, https://codepen.io/projw-the-lessful/pen/bJZKVW
