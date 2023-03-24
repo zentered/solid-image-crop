@@ -31,7 +31,7 @@
     "src"
   ],
   "scripts": {
-    "postinstall": "is-ci || husky install",
+    "prepare": "is-ci || husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "commitlint": {
