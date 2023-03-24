@@ -8,7 +8,6 @@ specifiers:
   eslint-config-prettier: ^8.8.0
   eslint-plugin-solid: ^0.11.0
   husky: ^8.0.3
-  is-ci: ^3.0.1
   lint-staged: ^13.2.0
   prettier: ^2.8.7
   solid-headless: ^0.13.1
@@ -28,7 +27,6 @@ devDependencies:
   eslint-config-prettier: 8.8.0_eslint@8.36.0
   eslint-plugin-solid: 0.11.0_eslint@8.36.0
   husky: 8.0.3
-  is-ci: 3.0.1
   lint-staged: 13.2.0
   prettier: 2.8.7
 
@@ -863,14 +861,6 @@ packages:
         integrity: sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA==
       }
     engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
-    dev: true
-
-  /ci-info/3.8.0:
-    resolution:
-      {
-        integrity: sha512-eXTggHWSooYhq49F2opQhuHWgzucfF2YgODK4e1566GQs5BIfP30B0oenwBJHfWxAs2fyPB1s7Mg949zLf61Yw==
-      }
-    engines: { node: '>=8' }
     dev: true
 
   /clean-stack/2.2.0:
@@ -2081,16 +2071,6 @@ packages:
         integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==
       }
     engines: { node: '>= 0.4' }
-    dev: true
-
-  /is-ci/3.0.1:
-    resolution:
-      {
-        integrity: sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==
-      }
-    hasBin: true
-    dependencies:
-      ci-info: 3.8.0
     dev: true
 
   /is-core-module/2.11.0:
