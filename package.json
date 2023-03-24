@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": false,
   "description": "Solid.js simple image crop tool using Cropper.js",
-  "type": "module",
   "keywords": [
     "solidjs",
     "solid-start",
@@ -21,18 +20,38 @@
     "type": "git",
     "url": "git+https://github.com/zentered/solid-image-crop.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "main": "src/index.jsx",
-  "files": [
-    "src"
-  ],
   "license": "MIT",
   "author": "Zentered <hi@zentered.co> (https://zentered.co)",
   "contributors": [
     "Patrick Heneise (https://github.com/PatrickHeneise)"
   ],
+  "type": "module",
+  "main": "src/index.jsx",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "prepare": "is-ci || husky install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,md,yaml}": [
+      "prettier --write"
+    ],
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --cache --fix"
+    ]
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
   "dependencies": {
     "cropperjs": "^1.5.13",
     "solid-headless": "^0.13.1",
@@ -40,9 +59,17 @@
     "solid-js": "^1.6.15"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.5.0",
+    "@commitlint/config-conventional": "^17.4.4",
     "eslint": "^8.36.0",
-    "prettier": "^2.8.7",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-solid": "^0.11.0"
+    "eslint-plugin-solid": "^0.11.0",
+    "husky": "^8.0.3",
+    "is-ci": "^3.0.1",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.7"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.6.0"
   }
 }
