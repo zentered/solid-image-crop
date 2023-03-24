@@ -1,6 +1,7 @@
 {
   "name": "@zentered/solid-image-crop",
   "version": "0.0.1",
+  "private": false,
   "description": "Solid.js simple image crop tool using Cropper.js",
   "type": "module",
   "keywords": [
