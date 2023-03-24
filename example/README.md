@@ -1,0 +1,1 @@
+## solid-image-crop example

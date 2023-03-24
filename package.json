@@ -1,0 +1,47 @@
+{
+  "name": "@zentered/solid-image-crop",
+  "version": "0.0.1",
+  "description": "Solid.js simple image crop tool using Cropper.js",
+  "type": "module",
+  "keywords": [
+    "solidjs",
+    "solid-start",
+    "cropper.js",
+    "imagecrop",
+    "image",
+    "crop",
+    "cropper"
+  ],
+  "homepage": "https://github.com/zentered/solid-image-crop#readme",
+  "bugs": {
+    "url": "https://github.com/zentered/solid-image-crop/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zentered/solid-image-crop.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "src/index.jsx",
+  "files": [
+    "src"
+  ],
+  "license": "MIT",
+  "author": "Zentered <hi@zentered.co> (https://zentered.co)",
+  "contributors": [
+    "Patrick Heneise (https://github.com/PatrickHeneise)"
+  ],
+  "dependencies": {
+    "cropperjs": "^1.5.13",
+    "solid-headless": "^0.13.1",
+    "solid-heroicons": "^3.1.1",
+    "solid-js": "^1.6.15"
+  },
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "prettier": "^2.8.7",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-solid": "^0.11.0"
+  }
+}
