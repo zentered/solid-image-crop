@@ -1,11 +1,20 @@
 import 'cropperjs/dist/cropper.css'
+
 import { createSignal, Show } from 'solid-js'
+import { createStore } from 'solid-js/store'
 import Cropper from 'cropperjs'
 import { Icon } from 'solid-heroicons'
 import { cloudArrowUp, photo } from 'solid-heroicons/solid'
+
 export default function ImageDrop(props) {
   let cropImage
-  const [dropZoneActive, setDropZoneActive] = createSignal(false),
+  const [state, setState] = createStore({
+      error: null,
+      loading: false,
+      file: {},
+      croppedImage: null
+    }),
+    [dropZoneActive, setDropZoneActive] = createSignal(false),
     [uploading, setUploading] = createSignal(false),
     [preview, setPreview] = createSignal(null),
     [cropper, setCropper] = createSignal(null),
@@ -15,8 +24,8 @@ export default function ImageDrop(props) {
     uploadFile = async (file) => {
       if (!file) return
       setUploading(true)
-      props.setState('loading', true)
-      props.setState('file', file)
+      setState('loading', true)
+      setState('file', file)
       try {
         const reader = new FileReader()
         reader.onload = (e) => {
@@ -33,14 +42,13 @@ export default function ImageDrop(props) {
       } catch (e) {
         console.error('upload failed', e)
         const message = e instanceof Error ? e.message : String(e)
-        props.setState('error', message)
+        setState('error', message)
       }
-      props.setState('loading', false)
+      setState('loading', false)
       setUploading(false)
     },
     handleFileDrop = async (e) => {
       e.preventDefault()
-      console.log(e)
       setDropZoneActive(false)
       uploadFile(e.dataTransfer.files[0])
     },
@@ -64,9 +72,13 @@ export default function ImageDrop(props) {
           <button
             type="button"
             class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2"
-            onClick={() =>
-              props.saveImage(cropper().getCroppedCanvas().toDataURL())
-            }
+            onClick={() => {
+              setState(
+                'croppedImage',
+                cropper().getCroppedCanvas().toDataURL(state.file.type)
+              )
+              props.saveImage(state)
+            }}
           >
             <Icon
               path={cloudArrowUp}

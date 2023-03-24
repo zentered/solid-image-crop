@@ -4,13 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "prettier",
-    "plugin:solid/recommended",
-    "plugin:markdown/recommended",
-    "plugin:json/recommended"
-  ],
+  "extends": ["eslint:recommended", "prettier", "plugin:solid/recommended"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true

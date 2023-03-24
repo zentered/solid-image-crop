@@ -6,16 +6,9 @@ import {
   TransitionChild,
   DialogOverlay
 } from 'solid-headless'
-import { createStore } from 'solid-js/store'
 import ImageDrop from './ImageDrop.jsx'
 
 export default function ImageUploadDialog(props) {
-  const [state, setState] = createStore({
-    error: null,
-    loading: false,
-    file: {}
-  })
-
   return (
     <Transition appear show={props.isOpen()}>
       <Dialog
@@ -54,7 +47,7 @@ export default function ImageUploadDialog(props) {
               >
                 {props.title}
               </DialogTitle>
-              <ImageDrop saveImage={props.saveImage} setState={setState} />
+              <ImageDrop saveImage={props.saveImage} />
             </DialogPanel>
           </TransitionChild>
         </div>
