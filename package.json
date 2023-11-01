@@ -40,10 +40,10 @@
     ]
   },
   "lint-staged": {
-    "*.{js,ts,tsx,json,md,yaml}": [
+    "*.{js,json,md,yaml}": [
       "prettier --write"
     ],
-    "*.{js,ts,jsx,tsx}": [
+    "*.{js,jsx}": [
       "eslint --cache --fix"
     ]
   },
