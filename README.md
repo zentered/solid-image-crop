@@ -9,8 +9,8 @@ Solid.js simple image crop tool using
 
 ## Installation
 
-    pnpm i @zentered/solid-image-crop
-    # or npm install @zentered/solid-image-crop
+    npm install @zentered/solid-image-crop
+    # or pnpm i @zentered/solid-image-crop
     # or yarn add @zentered/solid-image-crop
 
 ## Usage
