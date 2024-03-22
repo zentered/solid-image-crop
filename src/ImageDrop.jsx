@@ -1,6 +1,6 @@
 import 'cropperjs/dist/cropper.css'
 
-import { createSignal, Show } from 'solid-js'
+import { createEffect, createRenderEffect, createSignal, Show } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import Cropper from 'cropperjs'
 import { Icon } from 'solid-heroicons'
@@ -14,6 +14,8 @@ export default function ImageDrop(props) {
       file: {},
       croppedImage: null
     }),
+    [aspectRatioWidth, setAspectRatioWidth] = createSignal(1),
+    [aspectRatioHeight, setAspectRatioHeight] = createSignal(1),
     [dropZoneActive, setDropZoneActive] = createSignal(false),
     [uploading, setUploading] = createSignal(false),
     [preview, setPreview] = createSignal(null),
@@ -32,12 +34,13 @@ export default function ImageDrop(props) {
           setPreview(e.target.result)
           setCropper(
             new Cropper(cropImage, {
-              aspectRatio: 1 / 1,
+              aspectRatio: aspectRatioWidth() / aspectRatioHeight(),
               viewMode: 1,
               rotatable: false
             })
           )
         }
+        createRenderEffect(() => {})
         reader.readAsDataURL(file)
       } catch (e) {
         console.error('upload failed', e)
@@ -46,6 +49,13 @@ export default function ImageDrop(props) {
       }
       setState('loading', false)
       setUploading(false)
+    },
+    setAspectRatio = (width, height) => {
+      setAspectRatioWidth(width)
+      setAspectRatioHeight(height)
+      if (cropper()) {
+        cropper().setAspectRatio(width / height)
+      }
     },
     handleFileDrop = async (e) => {
       e.preventDefault()
@@ -56,6 +66,12 @@ export default function ImageDrop(props) {
       e.preventDefault()
       uploadFile(e.currentTarget.files[0])
     }
+
+  createEffect(() => {
+    if (props.aspectRatioWidth >= 1 && props.aspectRatioHeight >= 1) {
+      setAspectRatio(props.aspectRatioWidth, props.aspectRatioHeight)
+    }
+  })
 
   return (
     <>

@@ -7,8 +7,12 @@ import {
   DialogOverlay
 } from 'solid-headless'
 import ImageDrop from './ImageDrop.jsx'
+import { createSignal } from 'solid-js'
 
 export default function ImageUploadDialog(props) {
+  const [width, setWidth] = createSignal(16)
+  const [height, setHeight] = createSignal(9)
+
   return (
     <Transition appear show={props.isOpen()}>
       <Dialog
@@ -27,7 +31,6 @@ export default function ImageUploadDialog(props) {
           >
             <DialogOverlay class="fixed inset-0 bg-gray-900 bg-opacity-50" />
           </TransitionChild>
-
           {/* This element is to trick the browser into centering the modal contents. */}
           <span class="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
@@ -47,7 +50,23 @@ export default function ImageUploadDialog(props) {
               >
                 {props.title}
               </DialogTitle>
-              <ImageDrop saveImage={props.saveImage} />
+              <ImageDrop
+                saveImage={props.saveImage}
+                aspectRatioWidth={width()}
+                aspectRatioHeight={height()}
+              />
+              <select
+                class="mt-4"
+                onChange={(e) => {
+                  const [w, h] = e.currentTarget.value.split(':')
+                  setWidth(parseInt(w))
+                  setHeight(parseInt(h))
+                }}
+              >
+                <option value="16:9">16:9</option>
+                <option value="4:3">4:3</option>
+                <option value="1:1">1:1</option>
+              </select>
             </DialogPanel>
           </TransitionChild>
         </div>
