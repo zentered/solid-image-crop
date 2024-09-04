@@ -69,6 +69,6 @@
     "prettier": "^3.2.5"
   },
   "peerDependencies": {
-    "solid-js": "^>=1.6.0"
+    "solid-js": ">=1.6.0"
   }
 }
