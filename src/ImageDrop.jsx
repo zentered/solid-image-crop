@@ -1,6 +1,13 @@
-import { createEffect, createRenderEffect, createSignal, Show, on, untrack } from 'solid-js'
+import {
+  createEffect,
+  createRenderEffect,
+  createSignal,
+  Show,
+  on,
+  untrack
+} from 'solid-js'
 import { createStore } from 'solid-js/store'
-import 'cropperjs'
+import Cropper from 'cropperjs'
 import { Icon } from 'solid-heroicons'
 import { cloudArrowUp, photo } from 'solid-heroicons/solid'
 
@@ -18,6 +25,7 @@ export default function ImageDrop(props) {
     [dropZoneActive, setDropZoneActive] = createSignal(false),
     [uploading, setUploading] = createSignal(false),
     [preview, setPreview] = createSignal(null),
+    [cropper, setCropper] = createSignal(null),
     noPropagate = (e) => {
       e.preventDefault()
     },
@@ -30,6 +38,7 @@ export default function ImageDrop(props) {
         const reader = new FileReader()
         reader.onload = (e) => {
           setPreview(e.target.result)
+          setCropper(new Cropper(cropperImage))
         }
         createRenderEffect(() => {})
         reader.readAsDataURL(file)
@@ -44,8 +53,8 @@ export default function ImageDrop(props) {
     setAspectRatio = (width, height) => {
       setAspectRatioWidth(width)
       setAspectRatioHeight(height)
-      if (cropperSelection) {
-        cropperSelection.aspectRatio = aspectRatioWidth() / aspectRatioHeight();
+      if (cropper()) {
+        cropper().setAspectRatio = aspectRatioWidth() / aspectRatioHeight()
       }
     },
     handleFileDrop = async (e) => {
@@ -64,27 +73,21 @@ export default function ImageDrop(props) {
     }
   })
 
-  createEffect(on(preview, () => {
-    if (cropperImage) {
-      cropperImage.src = `${import.meta.env.BASE_URL}picture1.png`
-      console.log("inside")
-    }
-    console.log(cropperImage)
-  }))
+  createEffect(
+    on(preview, () => {
+      if (cropperImage) {
+        cropperImage.src = `${import.meta.env.BASE_URL}picture1.png`
+      }
+    })
+  )
 
   return (
     <>
       <Show when={preview() !== null}>
         <div>
           <div>
-            <cropper-canvas
-              background
-              class="block max-w-full h-96 w-96"
-            >
-              <cropper-image
-                ref={cropperImage}
-                alt="cropper"
-              />
+            <cropper-canvas background class="">
+              <cropper-image ref={cropperImage} alt="cropper" />
               <cropper-handle action="select" plain />
               <cropper-selection
                 ref={cropperSelection}
@@ -97,10 +100,13 @@ export default function ImageDrop(props) {
             type="button"
             class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2"
             onClick={async () => {
-              setState('croppedImage', 
-                await cropperSelection()?.$toCanvas().then(canvas => {
-                  return canvas.toDataURL(untrack(state).file.type)
-                })
+              setState(
+                'croppedImage',
+                await cropperSelection()
+                  ?.$toCanvas()
+                  .then((canvas) => {
+                    return canvas.toDataURL(untrack(state).file.type)
+                  })
               )
               props.saveImage(state)
             }}
