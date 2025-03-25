@@ -7,7 +7,7 @@ import {
   untrack
 } from 'solid-js'
 import { createStore } from 'solid-js/store'
-import Cropper from 'cropperjs'
+import 'cropperjs'
 import { Icon } from 'solid-heroicons'
 import { cloudArrowUp, photo } from 'solid-heroicons/solid'
 
@@ -25,7 +25,6 @@ export default function ImageDrop(props) {
     [dropZoneActive, setDropZoneActive] = createSignal(false),
     [uploading, setUploading] = createSignal(false),
     [preview, setPreview] = createSignal(null),
-    [cropper, setCropper] = createSignal(null),
     noPropagate = (e) => {
       e.preventDefault()
     },
@@ -38,7 +37,6 @@ export default function ImageDrop(props) {
         const reader = new FileReader()
         reader.onload = (e) => {
           setPreview(e.target.result)
-          setCropper(new Cropper(cropperImage))
         }
         createRenderEffect(() => {})
         reader.readAsDataURL(file)
@@ -53,8 +51,8 @@ export default function ImageDrop(props) {
     setAspectRatio = (width, height) => {
       setAspectRatioWidth(width)
       setAspectRatioHeight(height)
-      if (cropper()) {
-        cropper().setAspectRatio = aspectRatioWidth() / aspectRatioHeight()
+      if (cropperSelection) {
+        cropperSelection.aspectRatio = aspectRatioWidth() / aspectRatioHeight()
       }
     },
     handleFileDrop = async (e) => {
@@ -97,6 +95,7 @@ export default function ImageDrop(props) {
               />
               <cropper-handle action="select" plain />
               <cropper-selection
+                ref={cropperSelection}
                 initial-coverage="0.5"
                 dynamic
                 movable
