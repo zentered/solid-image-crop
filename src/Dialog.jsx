@@ -5,7 +5,7 @@ import {
   Transition,
   TransitionChild,
   DialogOverlay
-} from 'solid-headless'
+} from 'terracotta'
 import ImageDrop from './ImageDrop.jsx'
 import { createSignal } from 'solid-js'
 

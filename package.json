@@ -32,7 +32,9 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . -c eslint.config.js",
+    "codestyle": "prettier --check \"./**/*.{js,md}\""
   },
   "commitlint": {
     "extends": [
@@ -53,20 +55,21 @@
     ]
   },
   "dependencies": {
-    "cropperjs": "^1.6.2",
-    "solid-headless": "^0.13.1",
+    "cropperjs": "^2.0.0",
     "solid-heroicons": "^3.2.4",
-    "solid-js": "^1.8.22"
+    "solid-js": ">=1.6.0",
+    "terracotta": "^1.0.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.6.1",
-    "@commitlint/config-conventional": "^18.6.3",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-solid": "^0.14.3",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-solid": "^0.14.5",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3"
   },
   "peerDependencies": {
     "solid-js": ">=1.6.0"

@@ -1,13 +1,19 @@
-import 'cropperjs/dist/cropper.css'
-
-import { createEffect, createRenderEffect, createSignal, Show } from 'solid-js'
+import {
+  createEffect,
+  createRenderEffect,
+  createSignal,
+  Show,
+  on,
+  untrack
+} from 'solid-js'
 import { createStore } from 'solid-js/store'
-import Cropper from 'cropperjs'
+import 'cropperjs'
 import { Icon } from 'solid-heroicons'
 import { cloudArrowUp, photo } from 'solid-heroicons/solid'
 
 export default function ImageDrop(props) {
-  let cropImage
+  let cropperImage
+  let cropperSelection
   const [state, setState] = createStore({
       error: null,
       loading: false,
@@ -19,7 +25,6 @@ export default function ImageDrop(props) {
     [dropZoneActive, setDropZoneActive] = createSignal(false),
     [uploading, setUploading] = createSignal(false),
     [preview, setPreview] = createSignal(null),
-    [cropper, setCropper] = createSignal(null),
     noPropagate = (e) => {
       e.preventDefault()
     },
@@ -32,13 +37,6 @@ export default function ImageDrop(props) {
         const reader = new FileReader()
         reader.onload = (e) => {
           setPreview(e.target.result)
-          setCropper(
-            new Cropper(cropImage, {
-              aspectRatio: aspectRatioWidth() / aspectRatioHeight(),
-              viewMode: 1,
-              rotatable: false
-            })
-          )
         }
         createRenderEffect(() => {})
         reader.readAsDataURL(file)
@@ -53,8 +51,8 @@ export default function ImageDrop(props) {
     setAspectRatio = (width, height) => {
       setAspectRatioWidth(width)
       setAspectRatioHeight(height)
-      if (cropper()) {
-        cropper().setAspectRatio(width / height)
+      if (cropperSelection) {
+        cropperSelection.aspectRatio = aspectRatioWidth() / aspectRatioHeight()
       }
     },
     handleFileDrop = async (e) => {
@@ -73,25 +71,65 @@ export default function ImageDrop(props) {
     }
   })
 
+  createEffect(
+    on(preview, () => {
+      if (cropperImage) {
+        cropperImage.src = `${import.meta.env.BASE_URL}picture1.png`
+      }
+    })
+  )
+
   return (
     <>
       <Show when={preview() !== null}>
         <div>
           <div>
-            <img
-              ref={cropImage}
-              src={preview()}
-              alt="cropper"
-              class="block max-w-full h-96 w-96"
-            />
+            <cropper-canvas background class="">
+              <cropper-image
+                ref={cropperImage}
+                rotatable
+                scalable
+                skewable
+                translatable
+                alt="cropper"
+              />
+              <cropper-handle action="select" plain />
+              <cropper-selection
+                ref={cropperSelection}
+                initial-coverage="0.5"
+                dynamic
+                movable
+                resizable
+                zoomable
+              >
+                <cropper-grid role="grid" covered></cropper-grid>
+                <cropper-crosshair centered></cropper-crosshair>
+                <cropper-handle
+                  action="select"
+                  theme-color="rgba(255, 255, 255, 0.35)"
+                ></cropper-handle>
+                <cropper-handle action="n-resize"></cropper-handle>
+                <cropper-handle action="e-resize"></cropper-handle>
+                <cropper-handle action="s-resize"></cropper-handle>
+                <cropper-handle action="w-resize"></cropper-handle>
+                <cropper-handle action="ne-resize"></cropper-handle>
+                <cropper-handle action="nw-resize"></cropper-handle>
+                <cropper-handle action="se-resize"></cropper-handle>
+                <cropper-handle action="sw-resize"></cropper-handle>
+              </cropper-selection>
+            </cropper-canvas>
           </div>
           <button
             type="button"
             class="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-2"
-            onClick={() => {
+            onClick={async () => {
               setState(
                 'croppedImage',
-                cropper().getCroppedCanvas().toDataURL(state.file.type)
+                await cropperSelection()
+                  ?.$toCanvas()
+                  .then((canvas) => {
+                    return canvas.toDataURL(untrack(state).file.type)
+                  })
               )
               props.saveImage(state)
             }}
