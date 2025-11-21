@@ -1,6 +1,5 @@
 import {
   createEffect,
-  createRenderEffect,
   createSignal,
   Show,
   on,
@@ -11,9 +10,27 @@ import 'cropperjs'
 import { Icon } from 'solid-heroicons'
 import { cloudArrowUp, photo } from 'solid-heroicons/solid'
 
+/**
+ * ImageDrop component provides a drag-and-drop interface for uploading and cropping images.
+ *
+ * @param {Object} props - Component props
+ * @param {Function} props.saveImage - Callback function called when the user saves the cropped image. Receives the state object containing error, loading, file, and croppedImage.
+ * @param {number} [props.aspectRatioWidth=1] - Initial aspect ratio width
+ * @param {number} [props.aspectRatioHeight=1] - Initial aspect ratio height
+ * @param {string[]} [props.acceptedFileTypes=['image/jpeg', 'image/png', 'image/webp', 'image/gif']] - Array of accepted file MIME types
+ * @param {number} [props.maxFileSizeMB=10] - Maximum file size in megabytes
+ * @param {Function} [props.onError] - Optional callback function called when an error occurs. Receives the error message as a string.
+ * @returns {JSX.Element} The ImageDrop component
+ */
 export default function ImageDrop(props) {
   let cropperImage
   let cropperSelection
+
+  // Set default values for validation props
+  const acceptedFileTypes = props.acceptedFileTypes || ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+  const maxFileSizeMB = props.maxFileSizeMB || 10
+  const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024
+
   const [state, setState] = createStore({
       error: null,
       loading: false,
@@ -28,8 +45,32 @@ export default function ImageDrop(props) {
     noPropagate = (e) => {
       e.preventDefault()
     },
+    handleError = (message) => {
+      setState('error', message)
+      if (props.onError) {
+        props.onError(message)
+      }
+    },
     uploadFile = async (file) => {
       if (!file) return
+
+      // Reset error state
+      setState('error', null)
+
+      // Validate file type
+      if (!acceptedFileTypes.includes(file.type)) {
+        const message = `Invalid file type. Please upload one of: ${acceptedFileTypes.join(', ')}`
+        handleError(message)
+        return
+      }
+
+      // Validate file size
+      if (file.size > maxFileSizeBytes) {
+        const message = `File size exceeds ${maxFileSizeMB}MB limit. Current file: ${(file.size / 1024 / 1024).toFixed(2)}MB`
+        handleError(message)
+        return
+      }
+
       setUploading(true)
       setState('loading', true)
       setState('file', file)
@@ -38,12 +79,11 @@ export default function ImageDrop(props) {
         reader.onload = (e) => {
           setPreview(e.target.result)
         }
-        createRenderEffect(() => {})
         reader.readAsDataURL(file)
       } catch (e) {
         console.error('upload failed', e)
         const message = e instanceof Error ? e.message : String(e)
-        setState('error', message)
+        handleError(message)
       }
       setState('loading', false)
       setUploading(false)
@@ -73,8 +113,8 @@ export default function ImageDrop(props) {
 
   createEffect(
     on(preview, () => {
-      if (cropperImage) {
-        cropperImage.src = `${import.meta.env.BASE_URL}picture1.png`
+      if (cropperImage && preview()) {
+        cropperImage.src = preview()
       }
     })
   )
@@ -166,12 +206,18 @@ export default function ImageDrop(props) {
               id="image-upload"
               name="file"
               type="file"
+              accept={acceptedFileTypes.join(',')}
               disabled={uploading()}
               multiple={false}
               onInput={handleFileInput}
               class="sr-only"
             />
           </div>
+          <Show when={state.error}>
+            <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+              <p class="text-sm">{state.error}</p>
+            </div>
+          </Show>
           <div class="h-8" />
         </form>
       </Show>
