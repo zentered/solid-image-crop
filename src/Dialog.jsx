@@ -9,6 +9,17 @@ import {
 import ImageDrop from './ImageDrop.jsx'
 import { createSignal } from 'solid-js'
 
+/**
+ * ImageUploadDialog component provides a modal dialog for image upload and cropping with aspect ratio selection.
+ *
+ * @param {Object} props - Component props
+ * @param {string} props.title - Title displayed in the dialog header
+ * @param {Function} props.isOpen - Accessor function that returns whether the dialog is open
+ * @param {Function} props.closeModal - Callback function to close the dialog
+ * @param {Function} props.openModal - Callback function to open the dialog
+ * @param {Function} props.saveImage - Callback function called when the user saves the cropped image. Receives the state object containing error, loading, file, and croppedImage.
+ * @returns {JSX.Element} The ImageUploadDialog component
+ */
 export default function ImageUploadDialog(props) {
   const [width, setWidth] = createSignal(16)
   const [height, setHeight] = createSignal(9)

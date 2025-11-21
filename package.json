@@ -27,12 +27,16 @@
   ],
   "type": "module",
   "main": "src/index.jsx",
+  "types": "types/index.d.ts",
   "files": [
-    "src"
+    "src",
+    "types"
   ],
   "scripts": {
     "prepare": "husky install",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint . -c eslint.config.js",
     "codestyle": "prettier --check \"./**/*.{js,md}\""
   },
@@ -55,21 +59,26 @@
     ]
   },
   "dependencies": {
-    "cropperjs": "^2.0.0",
+    "cropperjs": "^2.1.0",
     "solid-heroicons": "^3.2.4",
     "solid-js": ">=1.6.0",
     "terracotta": "^1.0.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.0",
-    "@commitlint/config-conventional": "^19.8.0",
-    "eslint": "^9.22.0",
-    "eslint-config-prettier": "^10.1.1",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@solidjs/testing-library": "^0.8.10",
+    "@testing-library/user-event": "^14.6.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-solid": "^0.14.5",
-    "globals": "^16.0.0",
+    "globals": "^16.5.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.0",
-    "prettier": "^3.5.3"
+    "jsdom": "^27.2.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.6.2",
+    "vite-plugin-solid": "^2.11.10",
+    "vitest": "^4.0.13"
   },
   "peerDependencies": {
     "solid-js": ">=1.6.0"
