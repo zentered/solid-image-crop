@@ -2,7 +2,8 @@
   "name": "@zentered/solid-image-crop",
   "version": "0.0.1",
   "private": false,
-  "description": "Solid.js simple image crop tool using Cropper.js",
+  "description": "DEPRECATED - Solid.js simple image crop tool using Cropper.js",
+  "deprecated": true,
   "keywords": [
     "solidjs",
     "solid-start",

@@ -2,6 +2,8 @@
   <img src=".github/assets/header.png">
 </p>
 
+> **Warning** This package is deprecated and no longer maintained.
+
 # Solid Image Crop
 
 Solid.js simple image crop tool using
